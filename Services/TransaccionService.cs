@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
+using System.Collections.Generic;
+
 namespace Bank.Services
 {
     public class TransaccionService : ITransaccionService
@@ -42,12 +44,14 @@ namespace Bank.Services
 
         public List<Transaccione> GenerarExtractoMensual(int cuentaId, int mes, int año)
         {
-            return context.Transacciones
+            List < Transaccione > trans = new List < Transaccione >();
+            trans= context.Transacciones
             .Where(t => t.CuentaId == cuentaId &&
             //asegurarnos de que FechaTransaccion tiene un valor para acceder al mes y año
                 t.FechaTransaccion.HasValue && t.FechaTransaccion.Value.Month == mes && t.FechaTransaccion.Value.Year == año)
             .OrderByDescending(t => t.FechaTransaccion)
             .ToList();
+            return trans;
 
         }
         public async Task RealizarConsignacion(Transaccione transaccione)

@@ -18,10 +18,10 @@ namespace Bank.Services
         public List<Cliente> ObtenerClientesConRetirosFueraCiudad()
         {
             var clientesConRetiros = context.Clientes
-      .Where(cliente => cliente.Cuenta
-          .Any(cuenta => cuenta.Transacciones
+            .Where(cliente => cliente.Cuenta
+            .Any(cuenta => cuenta.Transacciones
               .Any(transaccion => transaccion.Tipo == "Retiro" && transaccion.Monto > 1000000)))
-      .ToList();
+                .ToList();
 
             return clientesConRetiros;
 

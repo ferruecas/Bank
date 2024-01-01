@@ -25,6 +25,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<ITransaccionService, TransaccionService>();
 builder.Services.AddScoped<ICuentaService, CuentaService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<ICiudadService, CiudadService>();
 builder.Services.AddSqlServer<BluesoftBankDbContext>("Server = (local); Database = BancoDB; Trusted_Connection = True; TrustServerCertificate = true");
 
 
