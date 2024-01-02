@@ -25,22 +25,6 @@ namespace Bank.Services
 
             return new OkObjectResult(cuenta.Saldo);
         }
-
-
-
-        public List<Transaccione> GenerarExtractoMensual(int cuentaId, int mes, int año)
-        {
-            return context.Transacciones
-            .Where(t => t.CuentaId == cuentaId &&
-            //asegurarnos de que FechaTransaccion tiene un valor para acceder al mes y año
-                t.FechaTransaccion.HasValue && t.FechaTransaccion.Value.Month == mes && t.FechaTransaccion.Value.Year == año)
-            .OrderByDescending(t => t.FechaTransaccion)
-            .ToList();
-
-        }
-
-
-
     }
 
     public interface ICuentaService

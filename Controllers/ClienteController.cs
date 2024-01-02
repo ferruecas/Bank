@@ -11,10 +11,13 @@ namespace Bank.Controllers
         {
             clienteService = service;
         }
-        [HttpGet("informe")]
-        public IActionResult get()
+        [HttpGet("informe/{mes}")]
+        public IActionResult get(int mes)
         {
-            return Ok(clienteService.ObtenerClientesConRetirosFueraCiudad());
+            //return Ok(clienteService.ExtractoCliente(mes));
+            var transaccion = new List<ClienteConTransacciones>();
+            transaccion = clienteService.ExtractoCliente(mes);
+            return Ok(new { Code = 200, Data = transaccion });
         }
     }
 }

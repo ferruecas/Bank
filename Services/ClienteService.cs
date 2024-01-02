@@ -14,24 +14,32 @@ namespace Bank.Services
             context = dbContext;
 
         }
-
-        public List<Cliente> ObtenerClientesConRetirosFueraCiudad()
+        public List<ClienteConTransacciones> ExtractoCliente(int mes)
         {
-            var clientesConRetiros = context.Clientes
-            .Where(cliente => cliente.Cuenta
-            .Any(cuenta => cuenta.Transacciones
-              .Any(transaccion => transaccion.Tipo == "Retiro" && transaccion.Monto > 1000000)))
-                .ToList();
+            var clientesConTransacciones = context.Clientes
+                .Select(cliente => new ClienteConTransacciones
+                {
+                    ClienteId = cliente.ClienteId,
+                    Nombre = cliente.Nombre,
+                    NumeroTransacciones = cliente.Cuenta.SelectMany(cuenta => cuenta.Transacciones)
+                        .Count(transaccion =>
+                            transaccion.FechaTransaccion != null &&
+                            transaccion.FechaTransaccion.Value.Month == mes)
+                }).ToList();
 
-            return clientesConRetiros;
-
+            return clientesConTransacciones;
         }
-
+    }
+    public class ClienteConTransacciones
+    {
+        public int ClienteId { get; set; }
+        public string Nombre { get; set; }
+        public int NumeroTransacciones { get; set; }
     }
 
     public interface IClienteService
     {
-        public List<Cliente> ObtenerClientesConRetirosFueraCiudad();
+        public List<ClienteConTransacciones> ExtractoCliente(int mes);
 
 
     }

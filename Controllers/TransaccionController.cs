@@ -18,12 +18,17 @@ namespace Bank.Controllers
             var transaccion = new List<Transaccione>();
             transaccion = transaccionService.ObtenerMovimientosRecientes(cuentaId, cantidad);
             return Ok(new { Code = 200, Data = transaccion });
-
-            //return Ok();
+        }
+        [HttpGet("GetTransacciones")]
+        public IActionResult GetTransacciones()
+        {
+            var transaccion = new List<object>();
+            transaccion = transaccionService.ObtenerTransaccionesConCiudad();
+            return Ok(new { Code = 200, Data = transaccion });
         }
 
         [HttpGet("{cuentaId}/{mes}/{año}")]
-        public IActionResult Get( int cuentaId, int mes, int año)
+        public IActionResult     Get( int cuentaId, int mes, int año)
         {
             List<Transaccione> transaccion = new List<Transaccione>();
             transaccion=transaccionService.GenerarExtractoMensual(cuentaId,mes,año);

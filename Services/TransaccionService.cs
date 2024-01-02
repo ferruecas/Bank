@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 
 using System.Collections.Generic;
+using iText.Commons.Actions.Contexts;
 
 namespace Bank.Services
 {
@@ -23,6 +24,7 @@ namespace Bank.Services
         public List<Transaccione> ObtenerMovimientosRecientes(int CuentaId, int cantidad)
         {
             var transaccion = new List<Transaccione>();
+
             if (cantidad == 0)
             {
                 transaccion = context.Transacciones
@@ -53,6 +55,31 @@ namespace Bank.Services
             .ToList();
             return trans;
 
+        }
+        public List<object> ObtenerTransaccionesConCiudad()
+        {
+            var transaccionesConCiudad = context.Transacciones
+                .Include(t => t.Ciudad)
+                .Where(t =>
+                    t.Monto.Value > 1000000 &&
+                    t.Tipo == "Retiro" &&
+                    t.Cuenta != null &&
+                    t.Cuenta.CiudadId != t.CiudadId)                
+                .ToList()
+                .Select(t => new
+                {
+                    TransaccionId = t.TransaccionId,
+                    Tipo = t.Tipo,
+                    Monto = t.Monto.Value,
+                    FechaTransaccion = t.FechaTransaccion,
+                    CuentaId = t.CuentaId,
+                    CiudadId = t.CiudadId,
+                    CiudadNombre = t.Ciudad?.Nombre,
+                    CuentaCiudadNombre = t.Cuenta?.Ciudad?.Nombre
+                })
+                .ToList<dynamic>();
+
+            return transaccionesConCiudad;
         }
         public async Task RealizarConsignacion(Transaccione transaccione)
         {
@@ -142,6 +169,7 @@ namespace Bank.Services
     }
     public interface ITransaccionService
     {
+        public List<object> ObtenerTransaccionesConCiudad();
         public List<Transaccione> ObtenerMovimientosRecientes(int CuentaId, int cantidad);
         public List<Transaccione> GenerarExtractoMensual(int cuentaId, int mes, int año);
         public Task RealizarConsignacion(Transaccione transaccione);
