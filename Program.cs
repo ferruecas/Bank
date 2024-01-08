@@ -26,7 +26,7 @@ builder.Services.AddScoped<ITransaccionService, TransaccionService>();
 builder.Services.AddScoped<ICuentaService, CuentaService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<ICiudadService, CiudadService>();
-builder.Services.AddSqlServer<BluesoftBankDbContext>("Server = (local); Database = BancoDB; Trusted_Connection = True; TrustServerCertificate = true");
+builder.Services.AddSqlServer<BluesoftBankDbContext>("Server=bancodb.database.windows.net;Database=BancoDB;User Id=goku;Password=11un8g4F@20;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;");
 
 
 var app = builder.Build();
